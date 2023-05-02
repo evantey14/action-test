@@ -24,6 +24,7 @@ jobs:
         id: changed-migration-files
         uses: tj-actions/changed-files@v32
         with:
+          since_last_remote_commit: true
           files: |
             webapp/migrations/**
       - name: Comment on PR if migrations folder changed
