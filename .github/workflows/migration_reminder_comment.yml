@@ -20,7 +20,7 @@ jobs:
         run: echo "$GITHUB_CONTEXT"
       - name: Get changed files in the migrations folder
         id: changed-migration-files
-        uses: tj-actions/changed-files@v32
+        uses: tj-actions/changed-files@v35
         with:
           since_last_remote_commit: true
           files: |
