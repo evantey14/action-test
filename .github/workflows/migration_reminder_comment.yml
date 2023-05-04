@@ -1,17 +1,32 @@
-name: Check for changes to migrations folder
+name: Remind user to run migrations
+
 on:
   pull_request:
-    types:
-      - closed
-    paths:
-      - webapp/migrations/**
+    types: [closed]
+
 jobs:
-  remind_user_about_migrations:
+  list_changed_files:
     name: Remind user to run migrations if /migrations folder was modified.
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
     steps:
+      - name: Fetch repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - name: Get changed files in the migrations folder
+        id: changed-migration-files
+        uses: tj-actions/changed-files@v35
+        with:
+          since_last_remote_commit: true
+          files: |
+            webapp/migrations/**
       - name: Comment on PR if migrations folder changed
+        if: steps.changed-migration-files.outputs.any_changed == 'true'
         uses: thollander/actions-comment-pull-request@v1
         with:
           message: |
