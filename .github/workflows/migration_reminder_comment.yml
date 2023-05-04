@@ -22,7 +22,7 @@ jobs:
         id: changed-migration-files
         uses: tj-actions/changed-files@v35
         with:
-          since_last_remote_commit: true
+          sha: ${{ github.event.pull_request.head.sha }}
           files: |
             webapp/migrations/**
       - name: Comment on PR if migrations folder changed
